@@ -44,6 +44,11 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.2</version>
+            </plugin>
             <!-- Usual compilation -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -64,7 +69,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Плагин для копирования зависимостей -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -82,7 +86,6 @@
                 </executions>
             </plugin>
 
-            <!-- Плагин для упаковки JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -90,23 +93,23 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <!-- Устанавливаем класс загрузчика -->
                             <mainClass>org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader</mainClass>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                         <manifestEntries>
                             <Rsrc-Main-Class>com.javarush.games.racer.RacerGame</Rsrc-Main-Class>
+                            <Class-Path>./</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.3.1</version>
                 <configuration>
-                    <!-- Исключаем тест с именем StrangeTest -->
                     <excludes>
                         <exclude>**/StrangeTest.java</exclude>
                     </excludes>
@@ -115,13 +118,12 @@
         </plugins>
 
         <resources>
-            <!-- Указываем ресурсы, которые будут добавлены в JAR -->
             <resource>
-                <directory>${project.build.directory}/lib</directory> <!-- Папка, куда скопированы зависимости -->
+                <directory>${project.build.directory}/lib</directory>
                 <includes>
-                    <include>**/*.jar</include> <!-- Все JAR-файлы -->
+                    <include>**/*.jar</include>
                 </includes>
-                <targetPath>lib/</targetPath> <!-- Папка внутри JAR, куда будут складываться зависимости -->
+                <targetPath>dependencies/</targetPath>
             </resource>
         </resources>
     </build>
